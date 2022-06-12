@@ -3,11 +3,9 @@ package com.ifpb.caelestiabackend.domain.entities;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,6 +23,10 @@ public class Module {
     private String name;
 
     private Integer qtyLessons;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id")
+    private Set<TheoricLesson> lessons;
 
     @Override
     public boolean equals(Object o) {
