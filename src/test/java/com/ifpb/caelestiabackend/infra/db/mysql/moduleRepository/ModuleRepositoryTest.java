@@ -48,6 +48,5 @@ class ModuleRepositoryTest {
         Assertions.assertThat(persistedModule.getName()).isEqualTo(module.getName());
         Assertions.assertThat(persistedModule.getQtyLessons()).isEqualTo(module.getQtyLessons());
         Assertions.assertThat(persistedModule.getId()).isNotNull();
-
     }
 }
