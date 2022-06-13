@@ -23,5 +23,5 @@ public class TheoricLesson {
     private String description;
 
     @ManyToOne
-    private Module moduleId;
+    private Module module;
 }

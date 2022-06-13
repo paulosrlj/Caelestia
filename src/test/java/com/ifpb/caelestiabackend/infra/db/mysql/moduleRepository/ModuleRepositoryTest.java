@@ -1,6 +1,7 @@
 package com.ifpb.caelestiabackend.infra.db.mysql.moduleRepository;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
+import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
 import org.apache.logging.log4j.LogManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,11 +16,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 
 @DataJpaTest
-@DisplayName("Module repository tests")
+@DisplayName("Module repository                                                        tests")
 class ModuleRepositoryTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModuleRepositoryTest.class);
@@ -35,6 +40,21 @@ class ModuleRepositoryTest {
 
     }
 
+    private TheoricLesson makeTheoricLesson() {
+        return TheoricLesson.builder()
+                .lessonName("Introdução a astronomia")
+                .description("Conteúdo da lição")
+                .xpEarned(100L)
+                .build();
+    }
+
+    private Module makeModule() {
+        return Module.builder()
+                .name("Astronomia antiga")
+                .qtyLessons(0)
+                .build();
+    }
+
     @Test
     public void ensureInjectedDependenciesAreNotNull() {
         Assertions.assertThat(testEntityManager).isNotNull();
@@ -43,17 +63,29 @@ class ModuleRepositoryTest {
 
     @Test
     public void mustSaveModuleInDatabase() {
-        Module module = Module.builder()
-                .name("Astronomia antiga")
-                .qtyLessons(0)
-                .build();
+        Module module = makeModule();
 
-        Module persistedModule = testEntityManager.persist(module);
+        Module persistedModule = moduleRepository.save(module);
 
         Assertions.assertThat(persistedModule.getName()).isEqualTo(module.getName());
         Assertions.assertThat(persistedModule.getQtyLessons()).isEqualTo(module.getQtyLessons());
         Assertions.assertThat(persistedModule.getId()).isNotNull();
 
-        LOGGER.debug(String.valueOf(persistedModule));
+    }
+
+    @Test
+    public void mustSaveModuleWithTheoricLessonInDatabase() {
+        TheoricLesson theoricLesson = makeTheoricLesson();
+        Module module = makeModule();
+        Set<TheoricLesson> lessons = new HashSet<>(Collections.singletonList(theoricLesson));
+        module.setLessons(lessons);
+
+        Module modulePersisted = moduleRepository.save(module);
+
+        Assertions.assertThat(modulePersisted.getId()).isNotNull();
+        Assertions.assertThat(modulePersisted.getLessons()).isEqualTo(lessons);
+
+        LOGGER.info(String.valueOf(lessons));
+        LOGGER.info(String.valueOf(modulePersisted.getLessons()));
     }
 }

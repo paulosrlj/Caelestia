@@ -24,8 +24,9 @@ public class Module {
 
     private Integer qtyLessons;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
     @JoinColumn(name = "id")
+    @ToString.Exclude
     private Set<TheoricLesson> lessons;
 
     @Override
