@@ -18,6 +18,7 @@ import javax.persistence.EntityManager;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +38,7 @@ class ModuleRepositoryTest {
 
     @BeforeEach
     void setUp() {
-
+//        moduleRepository.deleteAll();
     }
 
     private TheoricLesson makeTheoricLesson() {
@@ -71,6 +72,8 @@ class ModuleRepositoryTest {
         Assertions.assertThat(persistedModule.getQtyLessons()).isEqualTo(module.getQtyLessons());
         Assertions.assertThat(persistedModule.getId()).isNotNull();
 
+        LOGGER.info(String.valueOf(moduleRepository.findAll()));
+
     }
 
     @Test
@@ -85,7 +88,23 @@ class ModuleRepositoryTest {
         Assertions.assertThat(modulePersisted.getId()).isNotNull();
         Assertions.assertThat(modulePersisted.getLessons()).isEqualTo(lessons);
 
-        LOGGER.info(String.valueOf(lessons));
-        LOGGER.info(String.valueOf(modulePersisted.getLessons()));
+        LOGGER.info(String.valueOf(moduleRepository.findAll()));
+
+    }
+
+    @Test
+    public void mustFindModuleById() {
+        LOGGER.info(String.valueOf(moduleRepository.findAll()));
+        TheoricLesson theoricLesson = makeTheoricLesson();
+        Module module = makeModule();
+        Set<TheoricLesson> lessons = new HashSet<>(Collections.singletonList(theoricLesson));
+        module.setLessons(lessons);
+
+        Module moduleInserted = moduleRepository.save(module);
+
+        Optional<Module> moduleFound = moduleRepository.findById(moduleInserted.getId());
+
+        Assertions.assertThat(moduleFound.get().getId()).isEqualTo(moduleInserted.getId());
+        Assertions.assertThat(moduleFound.get().getLessons()).isEqualTo(lessons);
     }
 }
