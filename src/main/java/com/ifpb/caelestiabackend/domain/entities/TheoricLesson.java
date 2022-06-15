@@ -23,5 +23,6 @@ public class TheoricLesson {
     private String description;
 
     @ManyToOne
+    @JoinColumn(name = "module_id")
     private Module module;
 }

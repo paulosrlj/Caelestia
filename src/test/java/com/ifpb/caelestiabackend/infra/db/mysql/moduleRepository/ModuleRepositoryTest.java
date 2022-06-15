@@ -2,7 +2,6 @@ package com.ifpb.caelestiabackend.infra.db.mysql.moduleRepository;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
-import org.apache.logging.log4j.LogManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,20 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import javax.persistence.EntityManager;
-
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @DataJpaTest
-@DisplayName("Module repository                                                        tests")
+@DisplayName("Module repository tests")
 class ModuleRepositoryTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModuleRepositoryTest.class);
@@ -36,9 +27,11 @@ class ModuleRepositoryTest {
     @Autowired
     private ModuleRepository moduleRepository;
 
+    @Autowired
+    private TheoricLessonRepository theoricLessonRepository;
+
     @BeforeEach
     void setUp() {
-//        moduleRepository.deleteAll();
     }
 
     private TheoricLesson makeTheoricLesson() {
@@ -54,6 +47,15 @@ class ModuleRepositoryTest {
                 .name("Astronomia antiga")
                 .qtyLessons(0)
                 .build();
+    }
+
+    private Module persistModuleWithLessons() {
+        Module module = makeModule();
+        TheoricLesson theoricLesson = makeTheoricLesson();
+        module.addTheoricLesson(theoricLesson);
+        theoricLesson.setModule(module);
+
+        return moduleRepository.save(module);
     }
 
     @Test
@@ -72,39 +74,44 @@ class ModuleRepositoryTest {
         Assertions.assertThat(persistedModule.getQtyLessons()).isEqualTo(module.getQtyLessons());
         Assertions.assertThat(persistedModule.getId()).isNotNull();
 
-        LOGGER.info(String.valueOf(moduleRepository.findAll()));
-
     }
 
     @Test
-    public void mustSaveModuleWithTheoricLessonInDatabase() {
+    public void mustSaveModuleWithTheoricLesson() {
         TheoricLesson theoricLesson = makeTheoricLesson();
         Module module = makeModule();
-        Set<TheoricLesson> lessons = new HashSet<>(Collections.singletonList(theoricLesson));
-        module.setLessons(lessons);
+        module.addTheoricLesson(theoricLesson);
+        theoricLesson.setModule(module);
 
         Module modulePersisted = moduleRepository.save(module);
 
         Assertions.assertThat(modulePersisted.getId()).isNotNull();
-        Assertions.assertThat(modulePersisted.getLessons()).isEqualTo(lessons);
+        Assertions.assertThat(modulePersisted.getTheoricLessons()).isNotNull();
+        Assertions.assertThat(modulePersisted.getQtyLessons()).isEqualTo(1);
+    }
+
+    @Test
+    public void mustUpdateModuleInDatabase() {
+        Module module = makeModule();
+
+        Module persistedModule = moduleRepository.save(module);
+        persistedModule.setName("New name");
+
+        Module updatedModule = moduleRepository.save(persistedModule);
+
+        Assertions.assertThat(updatedModule.getName()).isEqualTo(persistedModule.getName());
+        Assertions.assertThat(persistedModule.getId()).isNotNull();
 
         LOGGER.info(String.valueOf(moduleRepository.findAll()));
-
     }
 
     @Test
     public void mustFindModuleById() {
-        LOGGER.info(String.valueOf(moduleRepository.findAll()));
-        TheoricLesson theoricLesson = makeTheoricLesson();
-        Module module = makeModule();
-        Set<TheoricLesson> lessons = new HashSet<>(Collections.singletonList(theoricLesson));
-        module.setLessons(lessons);
+        Module persistedModule = persistModuleWithLessons();
 
-        Module moduleInserted = moduleRepository.save(module);
+        Optional<Module> moduleFound = moduleRepository.findById(persistedModule.getId());
 
-        Optional<Module> moduleFound = moduleRepository.findById(moduleInserted.getId());
-
-        Assertions.assertThat(moduleFound.get().getId()).isEqualTo(moduleInserted.getId());
-        Assertions.assertThat(moduleFound.get().getLessons()).isEqualTo(lessons);
+        Assertions.assertThat(moduleFound).get().isEqualTo(persistedModule);
     }
+
 }

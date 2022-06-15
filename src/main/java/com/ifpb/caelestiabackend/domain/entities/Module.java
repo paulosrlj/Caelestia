@@ -4,8 +4,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -24,10 +23,23 @@ public class Module {
 
     private Integer qtyLessons;
 
-    @OneToMany
-    @JoinColumn(name = "id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "module", orphanRemoval = false)
     @ToString.Exclude
-    private Set<TheoricLesson> lessons;
+    private Set<TheoricLesson> theoricLessons;
+
+    public void addTheoricLesson(TheoricLesson theoricLesson) {
+        List<TheoricLesson> theoricLessonsList;
+
+        if (getTheoricLessons() == null) {
+            theoricLessonsList = new ArrayList<>();
+        } else {
+            theoricLessonsList = new ArrayList<>(getTheoricLessons());
+        }
+
+        this.qtyLessons += 1;
+        theoricLessonsList.add(theoricLesson);
+        setTheoricLessons(new HashSet<>(theoricLessonsList));
+    }
 
     @Override
     public boolean equals(Object o) {
