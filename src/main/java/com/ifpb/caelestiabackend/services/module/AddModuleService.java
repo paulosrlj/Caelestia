@@ -17,6 +17,6 @@ public class AddModuleService implements AddModule {
 
     @Override
     public Module add(Module module) {
-        return moduleRepository.save(module);
+       return moduleRepository.save(module);
     }
 }

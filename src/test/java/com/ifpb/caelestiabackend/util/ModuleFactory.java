@@ -18,4 +18,18 @@ public class ModuleFactory {
                 .qtyLessons(0)
                 .build();
     }
+
+    public static Module makePersistedModuleWithTheoricLesson() {
+        Module module = Module.builder()
+                .id(1L)
+                .name("Astronomia antiga")
+                .qtyLessons(0)
+                .build();
+
+        TheoricLesson tc = TheoricLessonFactory.makeTheoricLesson();
+        tc.setModule(module);
+        module.addTheoricLesson(tc);
+
+        return module;
+    }
 }
