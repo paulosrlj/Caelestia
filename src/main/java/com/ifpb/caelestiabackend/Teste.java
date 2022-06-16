@@ -2,12 +2,10 @@ package com.ifpb.caelestiabackend;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
-import com.ifpb.caelestiabackend.infra.db.mysql.moduleRepository.ModuleRepository;
-import com.ifpb.caelestiabackend.infra.db.mysql.moduleRepository.TheoricLessonRepository;
+import com.ifpb.caelestiabackend.repository.ModuleRepository;
+import com.ifpb.caelestiabackend.repository.TheoricLessonRepository;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Component

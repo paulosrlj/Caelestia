@@ -1,4 +1,4 @@
-package com.ifpb.caelestiabackend.infra.db.mysql.moduleRepository;
+package com.ifpb.caelestiabackend.repository;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import org.springframework.data.jpa.repository.JpaRepository;
