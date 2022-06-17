@@ -70,6 +70,6 @@ class ModuleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 }
