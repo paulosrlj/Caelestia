@@ -7,7 +7,6 @@ import com.ifpb.caelestiabackend.util.ModuleFactory;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,17 +14,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.assertj.core.api.Assertions;
 
-
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(ModuleController.class)
+@WebMvcTest(IModuleController.class)
 class ModuleControllerTest {
 
     @Autowired
@@ -48,14 +43,33 @@ class ModuleControllerTest {
                 .post("/module/")
                 .accept(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"Astronomia antiga\"," +
-                        "\"theoricLessons\": [" +
+                        "\"theoricLessons\": [{" +
                         "\"xpEarned\": 100, \"lessonName\": \"Introdução a astronomia\", " +
                         "\"description\": \"Conteúdo da lição\"" +
-                        "]")
+                        "}]}")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
                 .andExpect(status().isOk());
     }
 
+    @Test
+    public void shouldReturn400IfModuleNameIsNotProvided() throws Exception {
+        Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
+
+        Mockito.when(moduleService.add(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
+        Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .post("/module/")
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{\"theoricLessons\": [{" +
+                        "\"xpEarned\": 100, \"lessonName\": \"Introdução a astronomia\", " +
+                        "\"description\": \"Conteúdo da lição\"" +
+                        "}]}")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isOk());
+    }
 }
