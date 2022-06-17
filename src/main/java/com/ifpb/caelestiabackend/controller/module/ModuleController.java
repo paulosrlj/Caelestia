@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/module")
 public class ModuleController implements IModuleController {
@@ -20,7 +22,9 @@ public class ModuleController implements IModuleController {
 
     @Override
     @PostMapping(value = "/")
-    public ResponseEntity<Module> add(@RequestBody Module module) {
+    public ResponseEntity<Module> add(@Valid @RequestBody Module module) {
+
+
         Module modulePersisted = moduleService.add(module);
         return ResponseEntity.ok(modulePersisted);
     }
