@@ -19,13 +19,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("Add Module tests")
-class AddModuleServiceTest {
+class ModuleServiceTest {
 
     @MockBean
     private ModuleRepository moduleRepository;
 
     @Autowired
-    private AddModuleService addModuleService;
+    private ModuleService addModuleService;
 
     @Test
     public void shouldAddAModule() {
