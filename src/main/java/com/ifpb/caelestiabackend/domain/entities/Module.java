@@ -1,5 +1,6 @@
 package com.ifpb.caelestiabackend.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -20,11 +21,12 @@ public class Module {
     private Long id;
 
     private String name;
-
+    @Column(columnDefinition = "integer default 0")
     private Integer qtyLessons;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "module", orphanRemoval = false)
     @ToString.Exclude
+    @JsonIgnore
     private Set<TheoricLesson> theoricLessons;
 
     public void addTheoricLesson(TheoricLesson theoricLesson) {
