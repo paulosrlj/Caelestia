@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.*;
 
 @Getter
@@ -20,6 +21,7 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "O nome do módulo não pode estar em branco!")
     private String name;
     @Column(columnDefinition = "integer default 0")
     private Integer qtyLessons;
