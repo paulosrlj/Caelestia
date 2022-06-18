@@ -1,6 +1,7 @@
 package com.ifpb.caelestiabackend.controller.module;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
+import com.ifpb.caelestiabackend.dto.ModuleDto;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import com.ifpb.caelestiabackend.services.module.ModuleService;
 import com.ifpb.caelestiabackend.util.ModuleFactory;
@@ -36,7 +37,7 @@ class ModuleControllerTest {
     public void shouldReturn200IfValidDataIsProvided() throws Exception {
         Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
 
-        Mockito.when(moduleService.add(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
+        Mockito.when(moduleService.add(ArgumentMatchers.any(ModuleDto.class))).thenReturn(expectedModule);
         Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
 
         RequestBuilder request = MockMvcRequestBuilders
@@ -57,7 +58,7 @@ class ModuleControllerTest {
     public void shouldReturn400IfModuleNameIsNotProvided() throws Exception {
         Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
 
-        Mockito.when(moduleService.add(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
+        Mockito.when(moduleService.add(ArgumentMatchers.any(ModuleDto.class))).thenReturn(expectedModule);
         Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
 
         RequestBuilder request = MockMvcRequestBuilders

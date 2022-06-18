@@ -2,6 +2,7 @@ package com.ifpb.caelestiabackend.services.module;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
+import com.ifpb.caelestiabackend.dto.ModuleDto;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import com.ifpb.caelestiabackend.util.ModuleFactory;
 import com.ifpb.caelestiabackend.util.TheoricLessonFactory;
@@ -29,12 +30,12 @@ class ModuleServiceTest {
 
     @Test
     public void shouldAddAModule() {
-        Module module = ModuleFactory.makeModule();
+        ModuleDto moduleDto = ModuleFactory.makeModuleDto();
         Module expectedModule = ModuleFactory.makePersistedModule();
 
-        Mockito.when(moduleRepository.save(ArgumentMatchers.eq(module))).thenReturn(expectedModule);
+        Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
 
-        Module resultModule = addModuleService.add(module);
+        Module resultModule = addModuleService.add(moduleDto);
 
         Assertions.assertThat(resultModule).isEqualTo(expectedModule);
     }
@@ -47,11 +48,11 @@ class ModuleServiceTest {
 
         Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
 
-        Mockito.when(moduleRepository.save(ArgumentMatchers.eq(module))).thenReturn(expectedModule);
-        Module resultModule = addModuleService.add(module);
+        Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
+        Module resultModule = addModuleService.add(ModuleFactory.makeModuleDto());
 
         Mockito.verify(moduleRepository, Mockito.times(1))
-                .save(ArgumentMatchers.eq(module));
+                .save(ArgumentMatchers.any(Module.class));
         Assertions.assertThat(resultModule.getId()).isNotNull();
     }
 }
