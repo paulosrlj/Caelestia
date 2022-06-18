@@ -8,4 +8,6 @@ import javax.validation.Valid;
 
 public interface IModuleController {
     ResponseEntity<Module> add(@Valid ModuleDto moduleDto);
+
+
 }

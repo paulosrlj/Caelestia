@@ -55,6 +55,20 @@ class ModuleControllerTest {
     }
 
     @Test
+    public void shouldReturn204IfModuleIsDeleted() throws Exception {
+        Mockito.doNothing().when(moduleService).delete(ArgumentMatchers.anyLong());
+        Mockito.doNothing().when(moduleRepository).deleteById(ArgumentMatchers.anyLong());
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .delete("/module/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
     public void shouldReturn400IfModuleNameIsNotProvided() throws Exception {
         Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
 
