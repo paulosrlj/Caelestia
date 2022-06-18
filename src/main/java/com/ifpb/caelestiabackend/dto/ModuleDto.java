@@ -1,21 +1,28 @@
 package com.ifpb.caelestiabackend.dto;
 
-import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
+import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Data
+@Builder
 public class ModuleDto {
-    private String name;
-    private Integer qtyLessons;
-    private Set<TheoricLesson> theoricLessons;
 
-    public void addTheoricLesson(TheoricLesson theoricLesson) {
-        List<TheoricLesson> theoricLessonsList;
+    @NotBlank(message = "O nome do módulo não pode estar em branco!")
+    private String name;
+    private Integer qtyLessons = 0;
+
+    @Valid
+    private Set<TheoricLessonDto> theoricLessons;
+
+    public void addTheoricLesson(TheoricLessonDto theoricLessonDto) {
+        List<TheoricLessonDto> theoricLessonsList;
 
         if (getTheoricLessons() == null) {
             theoricLessonsList = new ArrayList<>();
@@ -24,7 +31,7 @@ public class ModuleDto {
         }
 
         this.qtyLessons += 1;
-        theoricLessonsList.add(theoricLesson);
+        theoricLessonsList.add(theoricLessonDto);
         setTheoricLessons(new HashSet<>(theoricLessonsList));
     }
 
