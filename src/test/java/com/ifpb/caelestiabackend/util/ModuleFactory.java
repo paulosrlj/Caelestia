@@ -2,10 +2,19 @@ package com.ifpb.caelestiabackend.util;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
+import com.ifpb.caelestiabackend.dto.ModuleDto;
 
 public class ModuleFactory {
     public static Module makeModule() {
         return Module.builder()
+                .id(null)
+                .name("Astronomia antiga")
+                .qtyLessons(0)
+                .build();
+    }
+
+    public static ModuleDto makeModuleDto() {
+        return ModuleDto.builder()
                 .name("Astronomia antiga")
                 .qtyLessons(0)
                 .build();
