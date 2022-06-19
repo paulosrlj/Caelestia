@@ -3,6 +3,7 @@ package com.ifpb.caelestiabackend.services.module;
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.usecases.module.AddModule;
 import com.ifpb.caelestiabackend.domain.usecases.module.DeleteModule;
+import com.ifpb.caelestiabackend.domain.usecases.module.GetById;
 import com.ifpb.caelestiabackend.dto.ModuleDto;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import org.springframework.beans.BeanUtils;
@@ -13,7 +14,7 @@ import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 @Service
-public class ModuleService implements AddModule, DeleteModule {
+public class ModuleService implements AddModule, DeleteModule, GetById {
 
     private final ModuleRepository moduleRepository;
 
@@ -39,5 +40,16 @@ public class ModuleService implements AddModule, DeleteModule {
         }
 
          moduleRepository.deleteById(id);
+    }
+
+    @Override
+    public Module getById(Long id) {
+        Optional<Module> module = moduleRepository.findById(id);
+
+        if (module.isEmpty()) {
+            throw new EntityNotFoundException(String.format("O módulo de Id %d não existe.", id));
+        }
+
+        return module.get();
     }
 }

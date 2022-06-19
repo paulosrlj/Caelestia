@@ -25,10 +25,17 @@ public class ModuleController implements IModuleController {
         return ResponseEntity.ok(modulePersisted);
     }
 
+    @Override
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-
         moduleService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @GetMapping("/{id}")
+    public ResponseEntity<Module> getById(@PathVariable("id") Long id) {
+        Module module = moduleService.getById(id);
+        return ResponseEntity.ok(module);
     }
 }
