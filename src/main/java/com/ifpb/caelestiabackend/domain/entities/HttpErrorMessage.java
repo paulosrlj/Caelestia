@@ -14,4 +14,9 @@ public class HttpErrorMessage {
     private HttpStatus status;
     private String message;
     private List<String> errors;
+
+    public HttpErrorMessage(HttpStatus status, String message) {
+        this.status = status;
+        this.message = message;
+    }
 }

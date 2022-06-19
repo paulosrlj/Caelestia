@@ -27,7 +27,7 @@ public class ModuleController implements IModuleController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        System.out.println("ID" + id);
+
         moduleService.delete(id);
         return ResponseEntity.noContent().build();
     }

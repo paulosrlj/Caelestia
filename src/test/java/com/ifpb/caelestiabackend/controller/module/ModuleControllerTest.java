@@ -5,6 +5,7 @@ import com.ifpb.caelestiabackend.dto.ModuleDto;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import com.ifpb.caelestiabackend.services.module.ModuleService;
 import com.ifpb.caelestiabackend.util.ModuleFactory;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -12,11 +13,15 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import javax.persistence.EntityNotFoundException;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -66,6 +71,22 @@ class ModuleControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void shouldThrowExceptionOnDeleteInANotExistingModule() throws Exception {
+        Mockito.doThrow(EntityNotFoundException.class)
+                .when(moduleService).delete(ArgumentMatchers.anyLong());
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .delete("/module/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isNoContent())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException()
+                        instanceof EntityNotFoundException));
     }
 
     @Test
