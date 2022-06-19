@@ -6,6 +6,7 @@ import com.ifpb.caelestiabackend.domain.usecases.module.DeleteModule;
 import com.ifpb.caelestiabackend.dto.ModuleDto;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -32,10 +33,11 @@ public class ModuleService implements AddModule, DeleteModule {
     @Override
     public void delete(Long id) {
         Optional<Module> module = moduleRepository.findById(id);
-        System.out.println(module.get());
+
         if (module.isEmpty()) {
             throw new EntityNotFoundException(String.format("O módulo de Id %d não existe.", id));
         }
-        moduleRepository.deleteById(id);
+
+         moduleRepository.deleteById(id);
     }
 }
