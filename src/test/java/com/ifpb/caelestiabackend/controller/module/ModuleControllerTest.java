@@ -18,10 +18,14 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.assertj.core.api.*;
 
 import javax.persistence.EntityNotFoundException;
+
+import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,6 +61,28 @@ class ModuleControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldReturnModuleIfExists() throws Exception {
+        Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
+
+        Mockito.when(moduleService.getById(ArgumentMatchers.anyLong())).thenReturn(expectedModule);
+        Mockito.when(moduleRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(expectedModule));
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/module/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Assertions.assertEquals(result.getResponse().getContentAsString(),
+                "{\"id\":1,\"name\":\"Astronomia antiga\",\"qtyLessons\":1}"
+        );
     }
 
     @Test
