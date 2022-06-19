@@ -38,4 +38,13 @@ public class ModuleController implements IModuleController {
         Module module = moduleService.getById(id);
         return ResponseEntity.ok(module);
     }
+
+    @Override
+    @PutMapping("/{id}")
+    public ResponseEntity<Module> update(@PathVariable("id") Long id, @RequestBody ModuleDto moduleDto) {
+        Module moduleUpdated = moduleService.update(moduleDto);
+        return ResponseEntity.ok(moduleUpdated);
+    }
+
+
 }
