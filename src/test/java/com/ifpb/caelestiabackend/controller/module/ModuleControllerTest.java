@@ -64,6 +64,29 @@ class ModuleControllerTest {
     }
 
     @Test
+    public void shouldUpdateAndReturnAModule() throws Exception {
+        Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
+        expectedModule.setName("Astronomia antiga atualizado");
+        Mockito.when(moduleService.update(ArgumentMatchers.anyLong(), ArgumentMatchers.any(ModuleDto.class)))
+                .thenReturn(expectedModule);
+        Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .put("/module/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Astronomia antiga atualizado\"}")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Assertions.assertEquals("{\"id\":1,\"name\":\"Astronomia antiga atualizado\",\"qtyLessons\":1}"
+                ,result.getResponse().getContentAsString()
+        );
+    }
+
+    @Test
     public void shouldReturnModuleIfExists() throws Exception {
         Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
 
