@@ -42,7 +42,7 @@ public class ModuleController implements IModuleController {
     @Override
     @PutMapping("/{id}")
     public ResponseEntity<Module> update(@PathVariable("id") Long id, @RequestBody ModuleDto moduleDto) {
-        Module moduleUpdated = moduleService.update(moduleDto);
+        Module moduleUpdated = moduleService.update(id, moduleDto);
         return ResponseEntity.ok(moduleUpdated);
     }
 

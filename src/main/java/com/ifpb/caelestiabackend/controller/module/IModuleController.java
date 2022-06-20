@@ -10,7 +10,9 @@ import javax.validation.Valid;
 public interface IModuleController {
     ResponseEntity<Module> add(@Valid ModuleDto moduleDto);
 
-    ResponseEntity<?> delete(@PathVariable("id") Long id);
+    ResponseEntity<?> delete(Long id);
 
-    ResponseEntity<Module> getById(@PathVariable("id") Long id);
+    ResponseEntity<Module> getById(Long id);
+
+    ResponseEntity<Module> update(Long id, ModuleDto moduleDto);
 }
