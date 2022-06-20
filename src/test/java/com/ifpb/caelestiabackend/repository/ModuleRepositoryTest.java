@@ -45,7 +45,6 @@ class ModuleRepositoryTest {
     private Module makeModule() {
         return Module.builder()
                 .name("Astronomia antiga")
-                .qtyLessons(0)
                 .build();
     }
 
@@ -71,7 +70,6 @@ class ModuleRepositoryTest {
         Module persistedModule = moduleRepository.save(module);
 
         Assertions.assertThat(persistedModule.getName()).isEqualTo(module.getName());
-        Assertions.assertThat(persistedModule.getQtyLessons()).isEqualTo(module.getQtyLessons());
         Assertions.assertThat(persistedModule.getId()).isNotNull();
     }
 
@@ -86,7 +84,6 @@ class ModuleRepositoryTest {
 
         Assertions.assertThat(modulePersisted.getId()).isNotNull();
         Assertions.assertThat(modulePersisted.getTheoricLessons()).isNotNull();
-        Assertions.assertThat(modulePersisted.getQtyLessons()).isEqualTo(1);
     }
 
     @Test

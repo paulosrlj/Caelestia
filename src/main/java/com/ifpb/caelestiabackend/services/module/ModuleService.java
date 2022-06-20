@@ -23,11 +23,9 @@ import java.util.Set;
 public class ModuleService implements AddModule, DeleteModule, GetById, UpdateModule {
 
     private final ModuleRepository moduleRepository;
-    private final TheoricLessonRepository theoricLessonRepository;
 
-    public ModuleService(ModuleRepository moduleRepository, TheoricLessonRepository theoricLessonRepository) {
+    public ModuleService(ModuleRepository moduleRepository) {
         this.moduleRepository = moduleRepository;
-        this.theoricLessonRepository = theoricLessonRepository;
     }
 
     @Override

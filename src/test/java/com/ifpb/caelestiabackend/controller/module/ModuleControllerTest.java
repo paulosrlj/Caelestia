@@ -81,7 +81,7 @@ class ModuleControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        Assertions.assertEquals("{\"id\":1,\"name\":\"Astronomia antiga atualizado\",\"qtyLessons\":1}"
+        Assertions.assertEquals("{\"id\":1,\"name\":\"Astronomia antiga atualizado\"}"
                 ,result.getResponse().getContentAsString()
         );
     }
@@ -104,7 +104,7 @@ class ModuleControllerTest {
                 .andReturn();
 
         Assertions.assertEquals(result.getResponse().getContentAsString(),
-                "{\"id\":1,\"name\":\"Astronomia antiga\",\"qtyLessons\":1}"
+                "{\"id\":1,\"name\":\"Astronomia antiga\"}"
         );
     }
 
