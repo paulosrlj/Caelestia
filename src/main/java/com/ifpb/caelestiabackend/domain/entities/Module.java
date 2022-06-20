@@ -22,8 +22,6 @@ public class Module {
 
     private String name;
 
-    private Integer qtyLessons = 0;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "module", orphanRemoval = false)
     @ToString.Exclude
     @JsonIgnore
@@ -38,7 +36,6 @@ public class Module {
             theoricLessonsList = new ArrayList<>(getTheoricLessons());
         }
 
-        this.qtyLessons += 1;
         theoricLessonsList.add(theoricLesson);
         setTheoricLessons(new HashSet<>(theoricLessonsList));
     }

@@ -9,14 +9,12 @@ public class ModuleFactory {
         return Module.builder()
                 .id(null)
                 .name("Astronomia antiga")
-                .qtyLessons(0)
                 .build();
     }
 
     public static ModuleDto makeModuleDto() {
         return ModuleDto.builder()
                 .name("Astronomia antiga")
-                .qtyLessons(0)
                 .build();
     }
 
@@ -24,7 +22,6 @@ public class ModuleFactory {
         return Module.builder()
                 .id(1L)
                 .name("Astronomia antiga")
-                .qtyLessons(0)
                 .build();
     }
 
@@ -32,7 +29,6 @@ public class ModuleFactory {
         Module module = Module.builder()
                 .id(1L)
                 .name("Astronomia antiga")
-                .qtyLessons(0)
                 .build();
 
         TheoricLesson tc = TheoricLessonFactory.makeTheoricLesson();

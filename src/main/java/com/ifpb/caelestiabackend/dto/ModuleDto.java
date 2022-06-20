@@ -16,7 +16,6 @@ public class ModuleDto {
 
     @NotBlank(message = "O nome do módulo não pode estar em branco!")
     private String name;
-    private Integer qtyLessons = 0;
 
     @Valid
     private Set<TheoricLessonDto> theoricLessons;
@@ -30,7 +29,6 @@ public class ModuleDto {
             theoricLessonsList = new ArrayList<>(getTheoricLessons());
         }
 
-        this.qtyLessons += 1;
         theoricLessonsList.add(theoricLessonDto);
         setTheoricLessons(new HashSet<>(theoricLessonsList));
     }
