@@ -31,6 +31,7 @@ public class Module {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "module", orphanRemoval = false)
     @ToString.Exclude
     @Valid
+    @JsonIgnore
     private Set<TheoricLesson> theoricLessons;
 
     @CreationTimestamp
