@@ -2,7 +2,6 @@ package com.ifpb.caelestiabackend.services.module;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
-import com.ifpb.caelestiabackend.dto.ModuleDto;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import com.ifpb.caelestiabackend.util.ModuleFactory;
 import com.ifpb.caelestiabackend.util.TheoricLessonFactory;
@@ -30,7 +29,7 @@ class ModuleServiceTest {
 
     @Test
     public void shouldAddAModule() {
-        ModuleDto moduleDto = ModuleFactory.makeModuleDto();
+        Module moduleDto = ModuleFactory.makeModule();
         Module expectedModule = ModuleFactory.makePersistedModule();
 
         Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
@@ -49,7 +48,7 @@ class ModuleServiceTest {
         Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
 
         Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
-        Module resultModule = addModuleService.add(ModuleFactory.makeModuleDto());
+        Module resultModule = addModuleService.add(ModuleFactory.makePersistedModuleWithTheoricLesson());
 
         Mockito.verify(moduleRepository, Mockito.times(1))
                 .save(ArgumentMatchers.any(Module.class));

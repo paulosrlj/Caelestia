@@ -1,7 +1,6 @@
 package com.ifpb.caelestiabackend.controller.module;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
-import com.ifpb.caelestiabackend.dto.ModuleDto;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import com.ifpb.caelestiabackend.services.module.ModuleService;
 import com.ifpb.caelestiabackend.util.ModuleFactory;
@@ -13,15 +12,12 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.dao.DataAccessResourceFailureException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.assertj.core.api.*;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -46,17 +42,13 @@ class ModuleControllerTest {
     public void shouldReturn200IfValidDataIsProvided() throws Exception {
         Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
 
-        Mockito.when(moduleService.add(ArgumentMatchers.any(ModuleDto.class))).thenReturn(expectedModule);
+        Mockito.when(moduleService.add(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
         Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/module/")
                 .accept(MediaType.APPLICATION_JSON)
-                .content("{\"name\":\"Astronomia antiga\"," +
-                        "\"theoricLessons\": [{" +
-                        "\"xpEarned\": 100, \"lessonName\": \"Introdução a astronomia\", " +
-                        "\"description\": \"Conteúdo da lição\"" +
-                        "}]}")
+                .content("{\"name\":\"Astronomia antiga\"}")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
@@ -67,7 +59,7 @@ class ModuleControllerTest {
     public void shouldUpdateAndReturnAModule() throws Exception {
         Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
         expectedModule.setName("Astronomia antiga atualizado");
-        Mockito.when(moduleService.update(ArgumentMatchers.anyLong(), ArgumentMatchers.any(ModuleDto.class)))
+        Mockito.when(moduleService.update(ArgumentMatchers.anyLong(), ArgumentMatchers.any(Module.class)))
                 .thenReturn(expectedModule);
         Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
 
@@ -103,8 +95,13 @@ class ModuleControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        Assertions.assertEquals(result.getResponse().getContentAsString(),
-                "{\"id\":1,\"name\":\"Astronomia antiga\"}"
+        Assertions.assertEquals(
+                "{\"id\":1,\"name\":\"Astronomia antiga\"," +
+                        "\"theoricLessons\":" +
+                        "[{\"id\":null,\"xpEarned\":100," +
+                        "\"lessonName\":\"Introdução a astronomia\"," +
+                        "\"description\":\"Conteúdo da lição\"}]}",
+                result.getResponse().getContentAsString()
         );
     }
 
@@ -133,7 +130,7 @@ class ModuleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
-                .andExpect(status().isNoContent())
+                .andExpect(status().isNotFound())
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException()
                         instanceof EntityNotFoundException));
     }
@@ -142,16 +139,13 @@ class ModuleControllerTest {
     public void shouldReturn400IfModuleNameIsNotProvided() throws Exception {
         Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
 
-        Mockito.when(moduleService.add(ArgumentMatchers.any(ModuleDto.class))).thenReturn(expectedModule);
+        Mockito.when(moduleService.add(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
         Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class))).thenReturn(expectedModule);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/module/")
                 .accept(MediaType.APPLICATION_JSON)
-                .content("{\"theoricLessons\": [{" +
-                        "\"xpEarned\": 100, \"lessonName\": \"Introdução a astronomia\", " +
-                        "\"description\": \"Conteúdo da lição\"" +
-                        "}]}")
+                .content("")
                 .contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
