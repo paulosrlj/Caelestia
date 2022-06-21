@@ -49,6 +49,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<HttpErrorMessage> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 }
