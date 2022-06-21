@@ -1,12 +1,13 @@
 package com.ifpb.caelestiabackend.controller.module;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
-import com.ifpb.caelestiabackend.dto.ModuleDto;
 import com.ifpb.caelestiabackend.services.module.ModuleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.AbstractMap;
+import java.util.LinkedHashMap;
 
 @RestController
 @RequestMapping("/module")
@@ -20,9 +21,10 @@ public class ModuleController implements IModuleController {
 
     @Override
     @PostMapping(value = "/")
-    public ResponseEntity<Module> add(@Valid @RequestBody ModuleDto moduleDto) {
-        Module modulePersisted = moduleService.add(moduleDto);
-        return ResponseEntity.ok(modulePersisted);
+    public ResponseEntity<AbstractMap<String, Object>>add(@Valid @RequestBody Module module) {
+        Module modulePersisted = moduleService.add(module);
+
+        return ResponseEntity.ok(makeHttpResponseObject(modulePersisted));
     }
 
     @Override
@@ -34,17 +36,32 @@ public class ModuleController implements IModuleController {
 
     @Override
     @GetMapping("/{id}")
-    public ResponseEntity<Module> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<AbstractMap<String, Object>> getById(@PathVariable("id") Long id) {
         Module module = moduleService.getById(id);
-        return ResponseEntity.ok(module);
+
+        return ResponseEntity.ok(makeHttpResponseObject(module));
     }
 
     @Override
     @PutMapping("/{id}")
-    public ResponseEntity<Module> update(@PathVariable("id") Long id, @RequestBody ModuleDto moduleDto) {
-        Module moduleUpdated = moduleService.update(id, moduleDto);
-        return ResponseEntity.ok(moduleUpdated);
+    public ResponseEntity<AbstractMap<String, Object>> update(@PathVariable("id") Long id
+            , @RequestBody Module module) {
+        Module moduleUpdated = moduleService.update(id, module);
+        AbstractMap<String, Object> obj = new LinkedHashMap<>();
+        obj.put("id", moduleUpdated.getId());
+        obj.put("name", moduleUpdated.getName());
+
+        return ResponseEntity.ok(obj);
     }
 
+    private AbstractMap<String, Object> makeHttpResponseObject(Module module) {
+        AbstractMap<String, Object> obj = new LinkedHashMap<>();
+        obj.put("id", module.getId());
+        obj.put("name", module.getName());
 
+        if (module.getTheoricLessons() != null)
+            obj.put("theoricLessons", module.getTheoricLessons());
+
+        return obj;
+    }
 }
