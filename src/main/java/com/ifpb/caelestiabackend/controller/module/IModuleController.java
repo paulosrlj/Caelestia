@@ -4,14 +4,14 @@ import com.ifpb.caelestiabackend.domain.entities.Module;
 import org.springframework.http.ResponseEntity;
 
 import javax.validation.Valid;
-import java.util.Map;
+import java.util.AbstractMap;
 
 public interface IModuleController {
-    ResponseEntity<Map<String, Object>> add(@Valid Module module);
+    ResponseEntity<AbstractMap<String, Object>> add(@Valid Module module);
 
     ResponseEntity<?> delete(Long id);
 
-    ResponseEntity<Module> getById(Long id);
+    ResponseEntity<AbstractMap<String, Object>> getById(Long id);
 
-    ResponseEntity<Module> update(Long id, ModuleDto moduleDto);
+    ResponseEntity<AbstractMap<String, Object>> update(Long id, Module module);
 }
