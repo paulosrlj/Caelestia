@@ -3,8 +3,13 @@ package com.ifpb.caelestiabackend.domain.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -20,12 +25,19 @@ public class Module {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "O nome do módulo não pode estar em branco!")
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "module", orphanRemoval = false)
     @ToString.Exclude
-    @JsonIgnore
+    @Valid
     private Set<TheoricLesson> theoricLessons;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     public void addTheoricLesson(TheoricLesson theoricLesson) {
         List<TheoricLesson> theoricLessonsList;
