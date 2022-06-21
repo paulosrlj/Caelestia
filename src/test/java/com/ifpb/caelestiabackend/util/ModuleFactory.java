@@ -2,19 +2,16 @@ package com.ifpb.caelestiabackend.util;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
-import com.ifpb.caelestiabackend.dto.ModuleDto;
+
+import java.time.LocalDateTime;
 
 public class ModuleFactory {
     public static Module makeModule() {
         return Module.builder()
                 .id(null)
                 .name("Astronomia antiga")
-                .build();
-    }
-
-    public static ModuleDto makeModuleDto() {
-        return ModuleDto.builder()
-                .name("Astronomia antiga")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
     }
 
@@ -22,6 +19,8 @@ public class ModuleFactory {
         return Module.builder()
                 .id(1L)
                 .name("Astronomia antiga")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
     }
 
@@ -29,6 +28,8 @@ public class ModuleFactory {
         Module module = Module.builder()
                 .id(1L)
                 .name("Astronomia antiga")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .build();
 
         TheoricLesson tc = TheoricLessonFactory.makeTheoricLesson();
