@@ -18,3 +18,9 @@ logging:
       ifpb:
         testLogLevel: DEBUG
     root: info
+
+server:
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
