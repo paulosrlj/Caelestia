@@ -6,16 +6,12 @@ import com.ifpb.caelestiabackend.domain.usecases.module.AddModule;
 import com.ifpb.caelestiabackend.domain.usecases.module.DeleteModule;
 import com.ifpb.caelestiabackend.domain.usecases.module.GetById;
 import com.ifpb.caelestiabackend.domain.usecases.module.UpdateModule;
-import com.ifpb.caelestiabackend.dto.ModuleDto;
-import com.ifpb.caelestiabackend.dto.TheoricLessonDto;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
-import com.ifpb.caelestiabackend.repository.TheoricLessonRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -29,16 +25,14 @@ public class ModuleService implements AddModule, DeleteModule, GetById, UpdateMo
     }
 
     @Override
-    public Module add(ModuleDto moduleDto) {
-        Module module = new Module();
-        BeanUtils.copyProperties(moduleDto, module, "qtyLessons");
-
+    public Module add(Module module) {
         Set<TheoricLesson> lessons = new HashSet<>();
 
-        if (moduleDto.getTheoricLessons() == null)
+        if (module.getTheoricLessons() == null) {
             return moduleRepository.save(module);
+        }
 
-        for(TheoricLessonDto l : moduleDto.getTheoricLessons()) {
+        for(TheoricLesson l : module.getTheoricLessons()) {
             TheoricLesson lesson = new TheoricLesson();
             BeanUtils.copyProperties(l, lesson);
             lesson.setModule(module);
@@ -73,16 +67,17 @@ public class ModuleService implements AddModule, DeleteModule, GetById, UpdateMo
     }
 
     @Override
-    public Module update(Long id, ModuleDto moduleDto) {
-        Optional<Module> module = moduleRepository.findById(id);
+    public Module update(Long id, Module module) {
+        Optional<Module> moduleFound = moduleRepository.findById(id);
 
-        if (module.isEmpty()) {
+        if (moduleFound.isEmpty()) {
             throw new EntityNotFoundException(String.format("O módulo de Id %d não existe.", id));
         }
 
-        Module moduleToPersist = module.get();
+        Module moduleToPersist = moduleFound.get();
 
-        BeanUtils.copyProperties(moduleDto, moduleToPersist, "qtyLessons", "theoricLessons");
+        BeanUtils.copyProperties(module, moduleToPersist,
+                "id", "theoricLessons");
 
         return moduleRepository.save(moduleToPersist);
     }
