@@ -1,5 +1,7 @@
 package com.ifpb.caelestiabackend.domain.entities.PraticalLesson;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ifpb.caelestiabackend.domain.entities.Module;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,19 +27,28 @@ public class PraticalLesson {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     @NotBlank(message = "O nome do módulo não pode estar em branco!")
     private String lessonName;
 
+    @Column(nullable = false)
     @NotBlank(message = "A descrição da lição não pode estar em braco")
     private String description;
 
+    @Column(nullable = false)
     @Min(value = 0, message = "O valor de Xp não pode ser menor que 0")
     @NotNull(message = "O valor de Xp não pode ser nulo!")
     private Long xpEarned;
 
     @Embedded
     @Valid
+    @NotNull(message = "As respostas não podem ser nulas")
     private Answers answers;
+
+    @ManyToOne
+    @JoinColumn(name = "module_id")
+    @JsonIgnore
+    private Module module;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
