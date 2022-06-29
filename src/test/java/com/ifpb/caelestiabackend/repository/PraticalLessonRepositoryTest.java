@@ -64,5 +64,18 @@ class PraticalLessonRepositoryTest {
                 .isEqualTo(persistedPl.getId());
     }
 
+    @Test
+    public void mustDeleteAPraticalLesson() {
+        PraticalLesson pl = PraticalLessonFactory.makePraticalLesson();
+        Module module = ModuleFactory.makeModule();
+        Module persistedModule = moduleRepository.save(module);
+        pl.setModule(persistedModule);
+        PraticalLesson persistedPl = praticalLessonRepository.save(pl);
 
+        praticalLessonRepository.deleteById(persistedPl.getId());
+
+        Optional<PraticalLesson> praticalLessonFound = praticalLessonRepository.findById(persistedPl.getId());
+
+        Assertions.assertThat(praticalLessonFound.isPresent()).isFalse();
+    }
 }
