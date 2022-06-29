@@ -46,7 +46,7 @@ public class PraticalLesson {
     private Answers answers;
 
     @ManyToOne
-    @JoinColumn(name = "module_id")
+    @JoinColumn(name = "module_id", nullable = false)
     @JsonIgnore
     private Module module;
 
