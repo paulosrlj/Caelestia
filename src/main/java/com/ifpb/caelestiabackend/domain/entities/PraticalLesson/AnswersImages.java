@@ -3,6 +3,7 @@ package com.ifpb.caelestiabackend.domain.entities.PraticalLesson;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
@@ -12,15 +13,16 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswersImages {
-    @NotBlank(message = "A url  da alternativa 1 não pode estar em branco")
+
+    @URL(message = "A url da alternativa 1 é invalida")
     private String answer1ImageUrl;
 
-    @NotBlank(message = "A url  da alternativa 2 não pode estar em branco")
+    @URL(message = "A url da alternativa 2 é invalida")
     private String answer2ImageUrl;
 
-    @NotBlank(message = "A url  da alternativa 3 não pode estar em branco")
+    @URL(message = "A url da alternativa 3 é invalida")
     private String answer3ImageUrl;
 
-    @NotBlank(message = "A url  da alternativa 4 não pode estar em branco")
+    @URL(message = "A url da alternativa 4 é invalida")
     private String answer4ImageUrl;
 }
