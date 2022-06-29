@@ -2,7 +2,6 @@ package com.ifpb.caelestiabackend.repository;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.PraticalLesson;
-import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
 import com.ifpb.caelestiabackend.util.ModuleFactory;
 import com.ifpb.caelestiabackend.util.PraticalLessonFactory;
 import org.assertj.core.api.Assertions;
@@ -14,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import java.util.Optional;
 
 
 @DataJpaTest
@@ -48,4 +49,20 @@ class PraticalLessonRepositoryTest {
         Assertions.assertThat(persistedPl.getId()).isNotNull();
         Assertions.assertThat(persistedPl.getModule().getId()).isEqualTo(persistedModule.getId());
     }
+
+    @Test
+    public void mustFindAPraticalLessonById() {
+        PraticalLesson pl = PraticalLessonFactory.makePraticalLesson();
+        Module module = ModuleFactory.makeModule();
+        Module persistedModule = moduleRepository.save(module);
+        pl.setModule(persistedModule);
+        PraticalLesson persistedPl = praticalLessonRepository.save(pl);
+
+        Optional<PraticalLesson> praticalLessonFound = praticalLessonRepository.findById(persistedPl.getId());
+
+        Assertions.assertThat(praticalLessonFound.get().getId())
+                .isEqualTo(persistedPl.getId());
+    }
+
+
 }
