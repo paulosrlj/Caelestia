@@ -78,4 +78,19 @@ class PraticalLessonRepositoryTest {
 
         Assertions.assertThat(praticalLessonFound.isPresent()).isFalse();
     }
+
+    @Test
+    public void mustUpdateAPraticalLesson() {
+        PraticalLesson pl = PraticalLessonFactory.makePraticalLesson();
+        Module module = ModuleFactory.makeModule();
+        Module persistedModule = moduleRepository.save(module);
+        pl.setModule(persistedModule);
+        praticalLessonRepository.save(pl);
+
+        String expectedLessonName = "New name";
+        pl.setLessonName(expectedLessonName);
+        PraticalLesson persistedPl = praticalLessonRepository.save(pl);
+
+        Assertions.assertThat(persistedPl.getLessonName()).isEqualTo(expectedLessonName);
+    }
 }
