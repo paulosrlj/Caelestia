@@ -98,6 +98,19 @@ class PraticalLessonControllerTest {
                         "\"answersImages\":null},\"module\":\"Astronomia antiga\"}",
                 result.getResponse().getContentAsString()
         );
+    }
 
+    @Test
+    public void shouldReturn204IfModuleIsDeleted() throws Exception {
+        Mockito.doNothing().when(praticalLessonService).delete(ArgumentMatchers.anyLong());
+        Mockito.doNothing().when(praticalLessonRepository).deleteById(ArgumentMatchers.anyLong());
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .delete("/pratical-lesson/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isNoContent());
     }
 }
