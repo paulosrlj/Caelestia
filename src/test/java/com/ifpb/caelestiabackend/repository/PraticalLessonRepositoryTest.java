@@ -39,10 +39,8 @@ class PraticalLessonRepositoryTest {
     @Test
     public void mustSaveAPraticalLesson() {
         PraticalLesson pl = PraticalLessonFactory.makePraticalLesson();
-
         Module module = ModuleFactory.makeModule();
         Module persistedModule = moduleRepository.save(module);
-
         pl.setModule(persistedModule);
         PraticalLesson persistedPl = praticalLessonRepository.save(pl);
 

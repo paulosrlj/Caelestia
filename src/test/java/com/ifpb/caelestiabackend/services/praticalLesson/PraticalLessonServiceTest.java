@@ -64,8 +64,22 @@ class PraticalLessonServiceTest {
                 PraticalLessonFactory.makePersistedPraticalLesson().getId()
         );
 
+        Mockito.verify(praticalLessonRepository).findById(ArgumentMatchers.anyLong());
+
         Assertions.assertThat(plFound.getId()).isNotNull();
         Assertions.assertThat(plFound.getId())
                 .isEqualTo(PraticalLessonFactory.makePersistedPraticalLesson().getId());
+    }
+
+    @Test
+    public void shouldCallDeleteByIdOnce() {
+        Mockito.when(praticalLessonRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.ofNullable(PraticalLessonFactory.makePersistedPraticalLesson()));
+
+        Mockito.doNothing().when(praticalLessonRepository).deleteById(ArgumentMatchers.anyLong());
+
+        praticalLessonService.delete(1L);
+
+        Mockito.verify(praticalLessonRepository).deleteById(ArgumentMatchers.anyLong());
     }
 }
