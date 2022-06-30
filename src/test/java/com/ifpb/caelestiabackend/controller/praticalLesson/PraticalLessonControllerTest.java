@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -112,5 +113,21 @@ class PraticalLessonControllerTest {
 
         mockMvc.perform(request)
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void shouldThrowExceptionOnDeleteInANotExistingPraticalLesson() throws Exception {
+        Mockito.doThrow(EntityNotFoundException.class)
+                .when(praticalLessonService).delete(ArgumentMatchers.anyLong());
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .delete("/pratical-lesson/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isNotFound())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException()
+                        instanceof EntityNotFoundException));
     }
 }
