@@ -5,6 +5,7 @@ import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.PraticalLesson;
 import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import com.ifpb.caelestiabackend.repository.TheoricLessonRepository;
+import com.ifpb.caelestiabackend.services.praticalLesson.PraticalLessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,20 +18,18 @@ import java.util.AbstractMap;
 @CrossOrigin
 public class PraticalLessonController implements IPraticalLessonController {
 
-    @Autowired
-    private TheoricLessonRepository theoricLessonRepository;
+    private final PraticalLessonService praticalLessonService;
 
-    @Autowired
-    private ModuleRepository moduleRepository;
+    public PraticalLessonController(PraticalLessonService praticalLessonService) {
+        this.praticalLessonService = praticalLessonService;
+    }
 
     @Override
-//    @PostMapping("/")
-    public ResponseEntity<AbstractMap<String, Object>> add(@Valid @RequestBody PraticalLesson praticalLesson) {
+    @PostMapping("/")
+    public ResponseEntity<AbstractMap<String, Object>> add(
+            @Valid @RequestBody PraticalLesson praticalLesson
+    ) {
         return null;
     }
 
-    @PostMapping("/")
-    public void add2(@Valid @RequestBody PraticalLesson praticalLesson) {
-        System.out.println(praticalLesson);
-    }
 }
