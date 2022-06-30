@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.AbstractMap;
+import java.util.LinkedHashMap;
 
 @RestController
 @RequestMapping("/pratical-lesson")
@@ -32,4 +33,31 @@ public class PraticalLessonController implements IPraticalLessonController {
         return null;
     }
 
+    @Override
+    @GetMapping("/{id}")
+    public ResponseEntity<AbstractMap<String, Object>> getById(@PathVariable("id") Long id) {
+        PraticalLesson pl = praticalLessonService.getById(id);
+
+        return ResponseEntity.ok(makeHttpResponseObject(pl));
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        praticalLessonService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    private AbstractMap<String, Object> makeHttpResponseObject(PraticalLesson pl) {
+        AbstractMap<String, Object> obj = new LinkedHashMap<>();
+        obj.put("id", pl.getId());
+        obj.put("lessonName", pl.getLessonName());
+        obj.put("description", pl.getDescription());
+        obj.put("xpEarned", pl.getXpEarned());
+        obj.put("answers", pl.getAnswers());
+
+        obj.put("module", pl.getModule().getName());
+
+        return obj;
+    }
 }

@@ -9,4 +9,8 @@ import java.util.AbstractMap;
 public interface IPraticalLessonController {
     ResponseEntity<AbstractMap<String, Object>> add(@Valid PraticalLesson praticalLesson);
 
+    ResponseEntity<AbstractMap<String, Object>> getById(Long id);
+
+    ResponseEntity<?> delete(Long id);
+
 }
