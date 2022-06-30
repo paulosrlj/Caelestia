@@ -17,6 +17,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -51,5 +53,19 @@ class PraticalLessonServiceTest {
         Assertions.assertThat(plPersisted.getId()).isNotNull();
         Assertions.assertThat(plPersisted.getCreatedAt()).isNotNull();
         Assertions.assertThat(plPersisted.getUpdatedAt()).isNotNull();
+    }
+
+    @Test
+    public void shouldFindPraticalLessonById() {
+        Mockito.when(praticalLessonRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.ofNullable(PraticalLessonFactory.makePersistedPraticalLesson()));
+
+        PraticalLesson plFound = praticalLessonService.getById(
+                PraticalLessonFactory.makePersistedPraticalLesson().getId()
+        );
+
+        Assertions.assertThat(plFound.getId()).isNotNull();
+        Assertions.assertThat(plFound.getId())
+                .isEqualTo(PraticalLessonFactory.makePersistedPraticalLesson().getId());
     }
 }
