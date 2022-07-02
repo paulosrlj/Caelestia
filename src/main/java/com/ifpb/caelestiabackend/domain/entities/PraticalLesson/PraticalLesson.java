@@ -2,10 +2,7 @@ package com.ifpb.caelestiabackend.domain.entities.PraticalLesson;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ifpb.caelestiabackend.domain.entities.Module;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,12 +12,14 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Data
 @Builder
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class PraticalLesson {
 
     @Id
@@ -51,8 +50,11 @@ public class PraticalLesson {
     private Module module;
 
     @CreationTimestamp
+    @EqualsAndHashCode.Exclude
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
+    @EqualsAndHashCode.Exclude
     private LocalDateTime updatedAt;
+
 }
