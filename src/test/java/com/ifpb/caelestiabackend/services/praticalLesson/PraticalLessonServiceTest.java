@@ -1,6 +1,7 @@
 package com.ifpb.caelestiabackend.services.praticalLesson;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
+import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.Answers;
 import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.PraticalLesson;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import com.ifpb.caelestiabackend.repository.PraticalLessonRepository;
@@ -10,7 +11,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -81,5 +81,34 @@ class PraticalLessonServiceTest {
         praticalLessonService.delete(1L);
 
         Mockito.verify(praticalLessonRepository).deleteById(ArgumentMatchers.anyLong());
+    }
+
+    @Test
+    public void shouldUpdateAPraticalLesson() {
+        PraticalLesson plUpdated = PraticalLessonFactory.makePersistedPraticalLesson();
+        plUpdated.setLessonName("Nome atualizado");
+        Answers currentAnswers = plUpdated.getAnswers();
+        currentAnswers.setAnswer1("Resposta 1 Atualizada");
+        plUpdated.setAnswers(currentAnswers);
+
+        PraticalLesson dataToBeUpdated = new PraticalLesson();
+        dataToBeUpdated.setLessonName("Nome atualizado");
+        Answers answersToBeUpdated = new Answers();
+        answersToBeUpdated.setAnswer1("Resposta 1 Atualizada");
+        dataToBeUpdated.setAnswers(answersToBeUpdated);
+
+        Mockito.when(praticalLessonRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.ofNullable(PraticalLessonFactory.makePersistedPraticalLesson()));
+        Mockito.when(praticalLessonRepository.save(ArgumentMatchers.eq(plUpdated)))
+                .thenReturn(plUpdated);
+
+        PraticalLesson pl = praticalLessonService.update(1L, dataToBeUpdated);
+
+        Assertions.assertThat(pl)
+//                .usingRecursiveComparison()
+//                .ignoringFields("updatedAt", "createdAt",
+//                        "module.createdAt", "module.updatedAt")
+                .isEqualTo(plUpdated);
+
     }
 }
