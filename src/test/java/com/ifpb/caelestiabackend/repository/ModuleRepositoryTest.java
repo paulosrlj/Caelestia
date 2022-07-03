@@ -22,9 +22,6 @@ class ModuleRepositoryTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(ModuleRepositoryTest.class);
 
     @Autowired
-    private TestEntityManager testEntityManager;
-
-    @Autowired
     private ModuleRepository moduleRepository;
 
     @Autowired
@@ -59,7 +56,7 @@ class ModuleRepositoryTest {
 
     @Test
     public void ensureInjectedDependenciesAreNotNull() {
-        Assertions.assertThat(testEntityManager).isNotNull();
+        Assertions.assertThat(theoricLessonRepository).isNotNull();
         Assertions.assertThat(moduleRepository).isNotNull();
     }
 
