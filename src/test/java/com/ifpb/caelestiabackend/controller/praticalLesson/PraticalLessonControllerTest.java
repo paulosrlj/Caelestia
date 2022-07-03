@@ -1,6 +1,7 @@
 package com.ifpb.caelestiabackend.controller.praticalLesson;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
+import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.Answers;
 import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.PraticalLesson;
 import com.ifpb.caelestiabackend.repository.PraticalLessonRepository;
 import com.ifpb.caelestiabackend.services.praticalLesson.PraticalLessonService;
@@ -129,5 +130,55 @@ class PraticalLessonControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException()
                         instanceof EntityNotFoundException));
+    }
+
+    @Test
+    public void shouldUpdateAndReturnAPraticalLesson() throws Exception {
+        PraticalLesson dataToBeUpdated = new PraticalLesson();
+        dataToBeUpdated.setLessonName("Nome atualizado");
+        Answers answersToBeUpdated = new Answers();
+        answersToBeUpdated.setAnswer1("Resposta 1 Atualizada");
+        dataToBeUpdated.setAnswers(answersToBeUpdated);
+
+        PraticalLesson expectedPl = PraticalLessonFactory.makePersistedPraticalLesson();
+        expectedPl.setLessonName("Nome atualizado");
+        Answers currentAnswers = expectedPl.getAnswers();
+        currentAnswers.setAnswer1("Resposta 1 Atualizada");
+        expectedPl.setAnswers(currentAnswers);
+
+        Mockito.when(praticalLessonService.update(ArgumentMatchers.anyLong(),
+                        ArgumentMatchers.eq(dataToBeUpdated)))
+                .thenReturn(expectedPl);
+        Mockito.when(praticalLessonRepository.save(ArgumentMatchers.eq(expectedPl)))
+                .thenReturn(expectedPl);
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .put("/pratical-lesson/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .content("""
+                        {"lessonName": "Nome atualizado",
+                        \t"answers": {
+                        \t\t"answer1": "Resposta 1 Atualizada"
+                        \t}
+                        }""")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Assertions.assertEquals("{\"id\":1," +
+                "\"lessonName\":\"Nome atualizado\"," +
+                "\"xpEarned\":150," +
+                "\"answers\":{" +
+                "\"answer1\":\"Resposta 1 Atualizada\"," +
+                "\"answer2\":\"Resposta 2\"," +
+                "\"answer3\":\"Resposta 3\"," +
+                "\"answer4\":\"Resposta 4\"," +
+                "\"correctAnswer\":2," +
+                "\"answersImages\":null" +
+                "}}"
+                , result.getResponse().getContentAsString()
+        );
     }
 }
