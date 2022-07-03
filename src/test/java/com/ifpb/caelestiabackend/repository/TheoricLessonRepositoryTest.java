@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 
 @DataJpaTest
@@ -17,9 +16,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 class TheoricLessonRepositoryTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TheoricLessonRepositoryTest.class);
-
-    @Autowired
-    private TestEntityManager testEntityManager;
 
     @Autowired
     private TheoricLessonRepository theoricLessonRepository;
