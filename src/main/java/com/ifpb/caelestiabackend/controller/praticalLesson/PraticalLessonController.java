@@ -2,11 +2,7 @@ package com.ifpb.caelestiabackend.controller.praticalLesson;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.PraticalLesson;
-import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;
-import com.ifpb.caelestiabackend.repository.ModuleRepository;
-import com.ifpb.caelestiabackend.repository.TheoricLessonRepository;
 import com.ifpb.caelestiabackend.services.praticalLesson.PraticalLessonService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,6 +42,21 @@ public class PraticalLessonController implements IPraticalLessonController {
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         praticalLessonService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    @PutMapping("/{id}")
+    public ResponseEntity<AbstractMap<String, Object>> update(@PathVariable("id") Long id,
+                                                              @RequestBody PraticalLesson praticalLesson) {
+        PraticalLesson plUpdated = praticalLessonService.update(id, praticalLesson);
+
+        AbstractMap<String, Object> obj = new LinkedHashMap<>();
+        obj.put("id", plUpdated.getId());
+        obj.put("lessonName", plUpdated.getLessonName());
+        obj.put("xpEarned", plUpdated.getXpEarned());
+        obj.put("answers", plUpdated.getAnswers());
+
+        return ResponseEntity.ok(obj);
     }
 
     private AbstractMap<String, Object> makeHttpResponseObject(PraticalLesson pl) {

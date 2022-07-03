@@ -13,4 +13,5 @@ public interface IPraticalLessonController {
 
     ResponseEntity<?> delete(Long id);
 
+    ResponseEntity<AbstractMap<String, Object>> update(Long id, PraticalLesson praticalLesson);
 }
