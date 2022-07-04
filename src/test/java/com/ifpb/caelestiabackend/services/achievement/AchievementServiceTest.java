@@ -1,11 +1,13 @@
 package com.ifpb.caelestiabackend.services.achievement;
 
 import com.ifpb.caelestiabackend.domain.entities.Achievement.Achievement;
+import com.ifpb.caelestiabackend.domain.entities.Achievement.BonusType;
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.PraticalLesson;
 import com.ifpb.caelestiabackend.repository.AchievementRepository;
 import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import com.ifpb.caelestiabackend.util.AchievementFactory;
+import com.ifpb.caelestiabackend.util.CopyNotNullProperties;
 import com.ifpb.caelestiabackend.util.ModuleFactory;
 import com.ifpb.caelestiabackend.util.PraticalLessonFactory;
 import org.junit.jupiter.api.Assertions;
@@ -70,5 +72,33 @@ class AchievementServiceTest {
         Achievement foundAc = achievementService.getById(1L);
 
         Assertions.assertEquals(fakePersistedAc, foundAc);
+    }
+
+    @Test
+    public void shouldUpdateAAchievement() {
+        Module module = ModuleFactory.makePersistedModule();
+        Achievement dataToUpdate = new Achievement();
+        Achievement fakePersistedAc = AchievementFactory.makePersistedAchievement();
+        fakePersistedAc.setModule(module);
+
+        String newName = "Novo nome";
+        BonusType newBonus = BonusType.PRATICAL_LESSON;
+
+        dataToUpdate.setAchievementName(newName);
+        dataToUpdate.setBonusType(newBonus);
+
+        Achievement expectedAc = new Achievement();
+        CopyNotNullProperties.copyNonNullProperties(fakePersistedAc, expectedAc);
+        expectedAc.setAchievementName(newName);
+        expectedAc.setBonusType(newBonus);
+
+        Mockito.when(achievementRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(fakePersistedAc));
+        Mockito.when(achievementRepository.save(ArgumentMatchers.eq(expectedAc)))
+                .thenReturn(expectedAc);
+
+        Achievement resultAc = achievementService.update(1L, dataToUpdate);
+
+        Assertions.assertEquals(expectedAc, resultAc);
     }
 }
