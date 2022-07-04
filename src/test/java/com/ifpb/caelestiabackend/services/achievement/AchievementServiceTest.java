@@ -18,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Optional;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("Achievement tests")
@@ -52,5 +54,32 @@ class AchievementServiceTest {
         Achievement persistedAc = achievementService.add(ac);
 
         Assertions.assertEquals(expectedAc, persistedAc);
+    }
+
+    @Test
+    public void shouldGetAchievementById() {
+        Module module = ModuleFactory.makePersistedModule();
+        Achievement ac = AchievementFactory.makeAchievement();
+        Achievement fakePersistedAc = AchievementFactory.makePersistedAchievement();
+        ac.setModule(module);
+        fakePersistedAc.setModule(module);
+
+        Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class)))
+                .thenReturn(module);
+        Mockito.when(achievementRepository.save(ArgumentMatchers.any(Achievement.class)))
+                .thenReturn(fakePersistedAc);
+
+        Achievement expectedAc = AchievementFactory.makePersistedAchievement();
+        expectedAc.setModule(module);
+
+        moduleRepository.save(module);
+        achievementRepository.save(expectedAc);
+
+        Mockito.when(achievementRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(fakePersistedAc));
+
+        Achievement foundAc = achievementService.getById(1L);
+
+        Assertions.assertEquals(expectedAc, foundAc);
     }
 }
