@@ -101,4 +101,20 @@ class AchievementServiceTest {
 
         Assertions.assertEquals(expectedAc, resultAc);
     }
+
+    @Test
+    public void shouldCallDeleteByIdOnce() {
+        Module module = ModuleFactory.makePersistedModule();
+        Achievement ac = AchievementFactory.makePersistedAchievement();
+        ac.setModule(module);
+
+        Mockito.when(achievementRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(ac));
+
+        Mockito.doNothing().when(achievementRepository).deleteById(ArgumentMatchers.anyLong());
+
+        achievementService.delete(1L);
+
+        Mockito.verify(achievementRepository).deleteById(ArgumentMatchers.anyLong());
+    }
 }
