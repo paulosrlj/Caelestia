@@ -19,8 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("Pratical Lesson tests")
@@ -37,22 +35,25 @@ class PraticalLessonServiceTest {
 
     @Test
     public void shouldAddAPraticalLesson() {
-        Module module = ModuleFactory.makeModule();
-        PraticalLesson pl = PraticalLessonFactory.makePraticalLesson();
+        Module moduleOfLesson = ModuleFactory.makePersistedModule();
+        PraticalLesson plWithExpectedParams = PraticalLessonFactory.makePraticalLesson();
+        Module moduleWithId = new Module();
+        moduleWithId.setId(moduleOfLesson.getId());
+        plWithExpectedParams.setModule(moduleWithId);
 
-        Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class)))
-                .thenReturn(ModuleFactory.makePersistedModule());
-        Mockito.when(praticalLessonRepository.save(ArgumentMatchers.any(PraticalLesson.class)))
-                .thenReturn(PraticalLessonFactory.makePersistedPraticalLesson());
+        Mockito.when(moduleRepository.findById(ArgumentMatchers.anyLong()))
+                .thenReturn(Optional.of(moduleOfLesson));
 
-        Module persistedModule = moduleRepository.save(module);
-        pl.setModule(persistedModule);
+        PraticalLesson expectedPl = PraticalLessonFactory.makePersistedPraticalLesson();
+        expectedPl.setModule(moduleOfLesson);
 
-        PraticalLesson plPersisted = praticalLessonService.add(pl);
+        System.out.println(plWithExpectedParams);
+        Mockito.when(praticalLessonRepository.save(ArgumentMatchers.eq(plWithExpectedParams)))
+                .thenReturn(expectedPl);
 
-        Assertions.assertThat(plPersisted.getId()).isNotNull();
-        Assertions.assertThat(plPersisted.getCreatedAt()).isNotNull();
-        Assertions.assertThat(plPersisted.getUpdatedAt()).isNotNull();
+        PraticalLesson plPersisted = praticalLessonService.add(plWithExpectedParams);
+
+        Assertions.assertThat(plPersisted).isEqualTo(expectedPl);
     }
 
     @Test

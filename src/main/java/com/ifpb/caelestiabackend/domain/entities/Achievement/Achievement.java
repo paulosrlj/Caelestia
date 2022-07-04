@@ -2,9 +2,12 @@ package com.ifpb.caelestiabackend.domain.entities.Achievement;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -29,4 +32,12 @@ public class Achievement {
     @OneToOne
     @JoinColumn(name = "module_id", referencedColumnName = "id", nullable = false)
     private Module module;
+
+    @CreationTimestamp
+    @EqualsAndHashCode.Exclude
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @EqualsAndHashCode.Exclude
+    private LocalDateTime updatedAt;
 }
