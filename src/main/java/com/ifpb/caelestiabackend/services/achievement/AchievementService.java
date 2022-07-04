@@ -6,6 +6,8 @@ import com.ifpb.caelestiabackend.domain.usecases.achievement.DeleteAchievement;
 import com.ifpb.caelestiabackend.domain.usecases.achievement.GetAchievementById;
 import com.ifpb.caelestiabackend.domain.usecases.achievement.UpdateAchievement;
 import com.ifpb.caelestiabackend.repository.AchievementRepository;
+import com.ifpb.caelestiabackend.util.CopyNotNullProperties;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -43,6 +45,16 @@ public class AchievementService implements AddAchievement, GetAchievementById, U
 
     @Override
     public Achievement update(Long id, Achievement achievement) {
-        return null;
+        Optional<Achievement> acFound = achievementRepository.findById(id);
+
+        if (acFound.isEmpty()) {
+            throw new EntityNotFoundException(String.format("A conquista de Id %d não existe.", id));
+        }
+
+        Achievement acToPersist = acFound.get();
+
+        CopyNotNullProperties.copyNonNullProperties(achievement, acToPersist);
+
+        return achievementRepository.save(acToPersist);
     }
 }
