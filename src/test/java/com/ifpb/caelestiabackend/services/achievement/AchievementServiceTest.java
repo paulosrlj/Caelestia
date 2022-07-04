@@ -64,22 +64,11 @@ class AchievementServiceTest {
         ac.setModule(module);
         fakePersistedAc.setModule(module);
 
-        Mockito.when(moduleRepository.save(ArgumentMatchers.any(Module.class)))
-                .thenReturn(module);
-        Mockito.when(achievementRepository.save(ArgumentMatchers.any(Achievement.class)))
-                .thenReturn(fakePersistedAc);
-
-        Achievement expectedAc = AchievementFactory.makePersistedAchievement();
-        expectedAc.setModule(module);
-
-        moduleRepository.save(module);
-        achievementRepository.save(expectedAc);
-
         Mockito.when(achievementRepository.findById(ArgumentMatchers.anyLong()))
                 .thenReturn(Optional.of(fakePersistedAc));
 
         Achievement foundAc = achievementService.getById(1L);
 
-        Assertions.assertEquals(expectedAc, foundAc);
+        Assertions.assertEquals(fakePersistedAc, foundAc);
     }
 }
