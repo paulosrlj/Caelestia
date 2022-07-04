@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("Achievement tests")
+@DisplayName("Achievement service tests")
 class AchievementServiceTest {
 
     @Autowired
