@@ -8,6 +8,9 @@ import com.ifpb.caelestiabackend.domain.usecases.achievement.UpdateAchievement;
 import com.ifpb.caelestiabackend.repository.AchievementRepository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
+
 @Service
 public class AchievementService implements AddAchievement, GetAchievementById, UpdateAchievement, DeleteAchievement {
 
@@ -29,7 +32,13 @@ public class AchievementService implements AddAchievement, GetAchievementById, U
 
     @Override
     public Achievement getById(Long id) {
-        return null;
+        Optional<Achievement> ac = achievementRepository.findById(id);
+
+        if (ac.isEmpty()) {
+            throw new EntityNotFoundException(String.format("A conquista de Id %d não existe.", id));
+        }
+
+        return ac.get();
     }
 
     @Override
