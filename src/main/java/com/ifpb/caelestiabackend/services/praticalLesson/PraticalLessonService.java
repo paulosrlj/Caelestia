@@ -30,6 +30,13 @@ public class PraticalLessonService implements AddPraticalLesson, GetById,
 
     @Override
     public PraticalLesson add(PraticalLesson praticalLesson) {
+        Optional<Module> moduleofLesson = moduleRepository.findById(praticalLesson.getModule().getId());
+
+        if (moduleofLesson.isEmpty()) {
+            throw new EntityNotFoundException(String.format("O módulo de Id %d não existe.",
+                    praticalLesson.getModule().getId()));
+        }
+
         return praticalLessonRepository.save(praticalLesson);
     }
 
