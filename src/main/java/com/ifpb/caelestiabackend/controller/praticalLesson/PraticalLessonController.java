@@ -26,7 +26,9 @@ public class PraticalLessonController implements IPraticalLessonController {
     public ResponseEntity<AbstractMap<String, Object>> add(
             @Valid @RequestBody PraticalLesson praticalLesson
     ) {
-        return null;
+        PraticalLesson pl = praticalLessonService.add(praticalLesson);
+
+        return ResponseEntity.ok(makeHttpResponseObject(pl));
     }
 
     @Override
