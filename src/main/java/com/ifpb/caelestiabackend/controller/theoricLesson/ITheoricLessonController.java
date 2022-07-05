@@ -6,7 +6,10 @@ import org.springframework.http.ResponseEntity;
 
 import javax.validation.Valid;
 import java.util.AbstractMap;
+import java.util.Map;
 
 public interface ITheoricLessonController {
-    ResponseEntity<AbstractMap<String, Object>> add(@Valid TheoricLesson theoricLesson);
+//    ResponseEntity<AbstractMap<String, Object>> add(@Valid TheoricLesson theoricLesson);
+void add(@Valid TheoricLesson theoricLesson);
+
 }
