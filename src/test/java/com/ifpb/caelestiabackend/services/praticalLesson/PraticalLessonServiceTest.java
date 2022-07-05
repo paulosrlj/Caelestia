@@ -59,7 +59,7 @@ class PraticalLessonServiceTest {
     @Test
     public void shouldFindPraticalLessonById() {
         Mockito.when(praticalLessonRepository.findById(ArgumentMatchers.anyLong()))
-                .thenReturn(Optional.ofNullable(PraticalLessonFactory.makePersistedPraticalLesson()));
+                .thenReturn(Optional.of(PraticalLessonFactory.makePersistedPraticalLesson()));
 
         PraticalLesson plFound = praticalLessonService.getById(
                 PraticalLessonFactory.makePersistedPraticalLesson().getId()
@@ -75,7 +75,7 @@ class PraticalLessonServiceTest {
     @Test
     public void shouldCallDeleteByIdOnce() {
         Mockito.when(praticalLessonRepository.findById(ArgumentMatchers.anyLong()))
-                .thenReturn(Optional.ofNullable(PraticalLessonFactory.makePersistedPraticalLesson()));
+                .thenReturn(Optional.of(PraticalLessonFactory.makePersistedPraticalLesson()));
 
         Mockito.doNothing().when(praticalLessonRepository).deleteById(ArgumentMatchers.anyLong());
 
@@ -99,7 +99,7 @@ class PraticalLessonServiceTest {
         dataToBeUpdated.setAnswers(answersToBeUpdated);
 
         Mockito.when(praticalLessonRepository.findById(ArgumentMatchers.anyLong()))
-                .thenReturn(Optional.ofNullable(PraticalLessonFactory.makePersistedPraticalLesson()));
+                .thenReturn(Optional.of(PraticalLessonFactory.makePersistedPraticalLesson()));
         Mockito.when(praticalLessonRepository.save(ArgumentMatchers.eq(plUpdated)))
                 .thenReturn(plUpdated);
 

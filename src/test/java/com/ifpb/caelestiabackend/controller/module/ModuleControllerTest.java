@@ -5,6 +5,7 @@ import com.ifpb.caelestiabackend.repository.ModuleRepository;
 import com.ifpb.caelestiabackend.services.module.ModuleService;
 import com.ifpb.caelestiabackend.util.ModuleFactory;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(IModuleController.class)
+@DisplayName("ModuleController tests")
 class ModuleControllerTest {
 
     @Autowired
