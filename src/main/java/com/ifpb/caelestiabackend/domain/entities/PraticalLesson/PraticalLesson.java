@@ -45,7 +45,7 @@ public class PraticalLesson {
 
     @ManyToOne
     @JoinColumn(name = "module_id", nullable = false)
-    @JsonIgnore
+    @NotNull(message = "O módulo não pode ser nulo")
     private Module module;
 
     @CreationTimestamp
