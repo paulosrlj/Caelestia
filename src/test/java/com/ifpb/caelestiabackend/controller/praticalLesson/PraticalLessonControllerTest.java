@@ -50,7 +50,8 @@ class PraticalLessonControllerTest {
         validData.setModule(module);
 
         PraticalLesson expectedPl = PraticalLessonFactory.makePersistedPraticalLesson();
-        expectedPl.setModule(module);
+        Module expectedModule = ModuleFactory.makePersistedModule();
+        expectedPl.setModule(expectedModule);
 
         Mockito.when(praticalLessonService.add(ArgumentMatchers.eq(validData)))
                 .thenReturn(expectedPl);
@@ -100,7 +101,7 @@ class PraticalLessonControllerTest {
                         "\"xpEarned\":150,\"answers\":{\"answer1\":\"Resposta 1\"" +
                         ",\"answer2\":\"Resposta 2\",\"answer3\":\"Resposta 3\"," +
                         "\"answer4\":\"Resposta 4\",\"correctAnswer\":2," +
-                        "\"answersImages\":null},\"module\":\"Astronomia antiga\"}",
+                        "\"answersImages\":null},\"module\":{\"id\":1,\"name\":\"Astronomia antiga\"}}",
                 result.getResponse().getContentAsString()
         );
     }
