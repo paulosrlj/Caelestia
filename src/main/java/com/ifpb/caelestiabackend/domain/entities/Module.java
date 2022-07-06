@@ -1,9 +1,11 @@
 package com.ifpb.caelestiabackend.domain.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ifpb.caelestiabackend.domain.entities.Achievement.Achievement;
 import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.PraticalLesson;
 import lombok.*;
+import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -11,17 +13,13 @@ import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @Entity
 @Builder
 public class Module {
@@ -42,7 +40,7 @@ public class Module {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "module")
     @ToString.Exclude
     @Valid
-    @JsonIgnore
+    @JsonManagedReference
     private Set<PraticalLesson> praticalLessons;
 
     @OneToOne(mappedBy = "module", cascade = CascadeType.ALL)
@@ -69,4 +67,16 @@ public class Module {
         setTheoricLessons(new HashSet<>(theoricLessonsList));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Module module = (Module) o;
+        return Objects.equals(id, module.id) && Objects.equals(name, module.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 }
