@@ -27,7 +27,6 @@ public class PraticalLessonController implements IPraticalLessonController {
             @Valid @RequestBody PraticalLesson praticalLesson
     ) {
         PraticalLesson pl = praticalLessonService.add(praticalLesson);
-
         return ResponseEntity.ok(makeHttpResponseObject(pl));
     }
 
@@ -69,7 +68,12 @@ public class PraticalLessonController implements IPraticalLessonController {
         obj.put("xpEarned", pl.getXpEarned());
         obj.put("answers", pl.getAnswers());
 
-        obj.put("module", pl.getModule().getName());
+        AbstractMap<String, Object> moduleObj = new LinkedHashMap<>();
+
+        moduleObj.put("id", pl.getModule().getId());
+        moduleObj.put("name", pl.getModule().getName());
+
+        obj.put("module", moduleObj);
 
         return obj;
     }
