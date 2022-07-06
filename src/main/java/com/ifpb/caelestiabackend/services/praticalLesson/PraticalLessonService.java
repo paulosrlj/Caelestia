@@ -37,6 +37,7 @@ public class PraticalLessonService implements AddPraticalLesson, GetById,
                     praticalLesson.getModule().getId()));
         }
 
+        praticalLesson.setModule(moduleofLesson.get());
         return praticalLessonRepository.save(praticalLesson);
     }
 
