@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @DisplayName("Achievement repository tests")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class AchievementRepositoryTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModuleRepositoryTest.class);
@@ -37,11 +39,12 @@ class AchievementRepositoryTest {
         Module module = moduleRepository.save(ModuleFactory.makeModule());
         Achievement ac = AchievementFactory.makeAchievement();
         Achievement expectedAc = AchievementFactory.makePersistedAchievement();
-
+        expectedAc.setModule(module);
         ac.setModule(module);
 
         Achievement savedAc = achievementRepository.save(ac);
 
+        Assertions.assertEquals(expectedAc, savedAc);
         Assertions.assertNotNull(savedAc.getId());
     }
 
@@ -51,7 +54,6 @@ class AchievementRepositoryTest {
         Achievement ac = AchievementFactory.makeAchievement();
         ac.setModule(module);
 
-        // id = 2
         Achievement expectedAc = achievementRepository.save(ac);
 
         Optional<Achievement> acFound = achievementRepository.findById(expectedAc.getId());

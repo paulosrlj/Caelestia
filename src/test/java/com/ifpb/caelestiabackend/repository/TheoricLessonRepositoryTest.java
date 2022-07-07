@@ -9,10 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 
 
 @DataJpaTest
 @DisplayName("Theoric Lesson repository tests")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class TheoricLessonRepositoryTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TheoricLessonRepositoryTest.class);
