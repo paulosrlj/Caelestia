@@ -41,7 +41,7 @@ public class Achievement {
     private BigDecimal baseBonusPercentage;
 
     @Column(nullable = false)
-    @NotBlank(message = "O tipo do bônus não pode estar em branco")
+    @NotNull(message = "O tipo do bônus não pode estar em branco")
     @Enumerated(EnumType.STRING)
     private BonusType bonusType;
 
