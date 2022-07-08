@@ -23,6 +23,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+
+import javax.persistence.EntityNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,7 +55,6 @@ class AchievementControllerTest {
         acToSave.setModule(module);
         acPersisted.setModule(module);
 
-        System.out.println(acToSave);
         Mockito.when(achievementService.add(ArgumentMatchers.eq(acToSave))).thenReturn(acPersisted);
         Mockito.when(achievementRepository.save(ArgumentMatchers.any(Achievement.class)))
                 .thenReturn(acPersisted);
@@ -75,6 +77,32 @@ class AchievementControllerTest {
     }
 
     @Test
+    public void shouldThrowExceptionIfUrlImageIsInvalid() throws Exception {
+        Module module = new Module();
+        module.setId(1L);
+        Achievement acToSave = AchievementFactory.makeAchievement();
+        acToSave.setModule(module);
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .post("/achievement/")
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"achievementName\":\"Observador Celeste\"," +
+                        "\"description\": \"+5% de xp em lições do tipo teórica\"," +
+                        "\"baseBonusPercentage\": 0.5," +
+                        "\"bonusType\": \"THEORIC_LESSON\"," +
+                        "\"urlImage\": \"urlqualquer.com.br\"," +
+                        "\"module\": {\"id\":1}" +
+                        "}")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException()
+                        instanceof MethodArgumentNotValidException));
+    }
+
+    @Test
     public void shouldReturnCorrectData() throws Exception {
         Module module = new Module();
         module.setId(1L);
@@ -86,7 +114,6 @@ class AchievementControllerTest {
         acToSave.setModule(module);
         acPersisted.setModule(moduleToReturn);
 
-        System.out.println(acToSave);
         Mockito.when(achievementService.add(ArgumentMatchers.eq(acToSave))).thenReturn(acPersisted);
         Mockito.when(achievementRepository.save(ArgumentMatchers.any(Achievement.class)))
                 .thenReturn(acPersisted);
