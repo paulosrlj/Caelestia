@@ -1,4 +1,4 @@
-package com.ifpb.caelestiabackend.domain.entities.User;
+package com.ifpb.caelestiabackend.domain.entities.User.Player;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -18,7 +18,7 @@ import java.util.Objects;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Player {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,8 +50,8 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email) && Objects.equals(passwordHash, user.passwordHash) && Objects.equals(name, user.name) && Objects.equals(nickname, user.nickname) && Objects.equals(totalPoints, user.totalPoints) && Objects.equals(level, user.level) && Objects.equals(coins, user.coins);
+        Player player = (Player) o;
+        return Objects.equals(id, player.id) && Objects.equals(email, player.email) && Objects.equals(passwordHash, player.passwordHash) && Objects.equals(name, player.name) && Objects.equals(nickname, player.nickname) && Objects.equals(totalPoints, player.totalPoints) && Objects.equals(level, player.level) && Objects.equals(coins, player.coins);
     }
 
     @Override
