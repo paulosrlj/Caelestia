@@ -289,4 +289,17 @@ class AchievementControllerTest {
                         instanceof InvalidUrlImage));
 
     }
+
+    @Test
+    public void shouldReturn204IfAchievementIsDeleted() throws Exception {
+        Mockito.doNothing().when(achievementService).delete(ArgumentMatchers.anyLong());
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .delete("/achievement/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isNoContent());
+    }
 }
