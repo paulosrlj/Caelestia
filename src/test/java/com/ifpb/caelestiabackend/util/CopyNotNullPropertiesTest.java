@@ -2,6 +2,7 @@ package com.ifpb.caelestiabackend.util;
 
 import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.Answers;
 import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.PraticalLesson;
+import com.ifpb.caelestiabackend.util.factories.PraticalLessonFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
