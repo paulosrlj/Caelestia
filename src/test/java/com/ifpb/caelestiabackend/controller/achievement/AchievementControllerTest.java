@@ -26,9 +26,9 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import javax.persistence.EntityNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -197,6 +197,34 @@ class AchievementControllerTest {
                         "\"urlImage\":\"https://urlqualquer.com.br\"," +
                         "\"module\":{\"id\":1,\"name\":\"Modulo qualquer\"}" +
                         "}", result.getResponse().getContentAsString()
+        );
+    }
+
+    @Test
+    public void shouldReturnAchievementIfExists() throws Exception {
+        Module expectedModule = ModuleFactory.makePersistedModuleWithTheoricLesson();
+        Achievement expectedAc = AchievementFactory.makePersistedAchievement();
+        expectedAc.setModule(expectedModule);
+
+        Mockito.when(achievementService.getById(ArgumentMatchers.anyLong())).thenReturn(expectedAc);
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .get("/achievement/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(request)
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Assertions.assertEquals(
+                "{\"id\":1,\"achievementName\":\"Observador Celeste\"," +
+                        "\"description\":\"+5% de xp em lições do tipo teórica\"," +
+                        "\"baseBonusPercentage\":0.5," +
+                        "\"bonusType\":\"THEORIC_LESSON\"," +
+                        "\"urlImage\":\"https://urlqualquer.com.br\"," +
+                        "\"module\":{\"id\":1,\"name\":\"Astronomia antiga\"}}",
+                result.getResponse().getContentAsString()
         );
     }
 }
