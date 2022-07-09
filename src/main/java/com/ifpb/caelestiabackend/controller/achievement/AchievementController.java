@@ -3,6 +3,8 @@ package com.ifpb.caelestiabackend.controller.achievement;
 import com.ifpb.caelestiabackend.domain.entities.Achievement.Achievement;
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.services.achievement.AchievementService;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +14,7 @@ import java.util.LinkedHashMap;
 
 @RestController
 @RequestMapping("/achievement")
+@Log4j2
 public class AchievementController implements IAchievementController {
 
     private final AchievementService achievementService;
@@ -23,7 +26,7 @@ public class AchievementController implements IAchievementController {
     @Override
     @PostMapping("/")
     public ResponseEntity<AbstractMap<String, Object>> add(@Valid @RequestBody Achievement achievement) {
-        System.out.println(achievement);
+        log.info(achievement);
         Achievement ac = achievementService.add(achievement);
         return ResponseEntity.ok(makeHttpResponseObject(ac));
     }
@@ -42,8 +45,14 @@ public class AchievementController implements IAchievementController {
     }
 
     @Override
-    public ResponseEntity<AbstractMap<String, Object>> update(Long id, Achievement achievement) {
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<AbstractMap<String, Object>> update(@PathVariable Long id
+            , @RequestBody Achievement achievement) {
+        log.info("Achievement request");
+        log.info(achievement);
+        Achievement acUpdated = achievementService.update(id, achievement);
+
+        return ResponseEntity.ok(makeHttpResponseObject(acUpdated));
     }
 
     private AbstractMap<String, Object> makeHttpResponseObject(Achievement ac) {
