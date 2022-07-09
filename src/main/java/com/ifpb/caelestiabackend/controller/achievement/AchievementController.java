@@ -1,12 +1,10 @@
 package com.ifpb.caelestiabackend.controller.achievement;
 
 import com.ifpb.caelestiabackend.domain.entities.Achievement.Achievement;
+import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.services.achievement.AchievementService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.AbstractMap;
@@ -36,8 +34,11 @@ public class AchievementController implements IAchievementController {
     }
 
     @Override
-    public ResponseEntity<AbstractMap<String, Object>> getById(Long id) {
-        return null;
+    @GetMapping("/{id}")
+    public ResponseEntity<AbstractMap<String, Object>> getById(@PathVariable("id") Long id) {
+        Achievement ac = achievementService.getById(id);
+
+        return ResponseEntity.ok(makeHttpResponseObject(ac));
     }
 
     @Override
