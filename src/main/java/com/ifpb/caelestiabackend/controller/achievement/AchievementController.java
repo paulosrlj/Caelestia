@@ -36,8 +36,10 @@ public class AchievementController implements IAchievementController {
     }
 
     @Override
-    public ResponseEntity<?> delete(Long id) {
-        return null;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+        achievementService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
