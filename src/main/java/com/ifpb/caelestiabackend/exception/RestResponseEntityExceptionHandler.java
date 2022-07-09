@@ -1,11 +1,12 @@
 package com.ifpb.caelestiabackend.exception;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.ifpb.caelestiabackend.domain.entities.HttpErrorMessage;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,9 +15,9 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 @ControllerAdvice
 @ResponseStatus
@@ -29,6 +30,26 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 //
 //        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
 //    }
+
+    @Override
+    public ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception,
+                                                               HttpHeaders headers, HttpStatus status, WebRequest request) {
+        String errorDetails = "JSON inválido " + exception.getMessage();
+
+        if (exception.getCause() instanceof InvalidFormatException ifx) {
+            if (ifx.getTargetType() != null && ifx.getTargetType().isEnum()) {
+                errorDetails = String.format("Enum inválido: '%s' para o campo: '%s'. " +
+                                "O valor deve ser um destes: %s.",
+                        ifx.getValue(), ifx.getPath().get(ifx.getPath().size() - 1).getFieldName(),
+                        Arrays.toString(ifx.getTargetType().getEnumConstants()));
+            }
+        }
+
+        List<String> errors = Collections.singletonList(errorDetails);
+
+        HttpErrorMessage message = new HttpErrorMessage(HttpStatus.BAD_REQUEST, "Erro de validação", errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
+    }
 
     @Override
     @ResponseStatus(HttpStatus.BAD_REQUEST)

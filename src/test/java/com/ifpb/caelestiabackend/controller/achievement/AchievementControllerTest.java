@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -100,6 +101,32 @@ class AchievementControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(result -> Assertions.assertTrue(result.getResolvedException()
                         instanceof MethodArgumentNotValidException));
+    }
+
+    @Test
+    public void shouldThrowExceptionIfBonusTypeIsInvalid() throws Exception {
+        Module module = new Module();
+        module.setId(1L);
+        Achievement acToSave = AchievementFactory.makeAchievement();
+        acToSave.setModule(module);
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .post("/achievement/")
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"achievementName\":\"Observador Celeste\"," +
+                        "\"description\": \"+5% de xp em lições do tipo teórica\"," +
+                        "\"baseBonusPercentage\": 0.5," +
+                        "\"bonusType\": \"THEORIC_LLESSON\"," +
+                        "\"urlImage\": \"https://urlqualquer.com.br\"," +
+                        "\"module\": {\"id\":1}" +
+                        "}")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException()
+                        instanceof HttpMessageNotReadableException));
     }
 
     @Test

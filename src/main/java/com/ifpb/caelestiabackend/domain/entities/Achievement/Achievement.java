@@ -2,7 +2,6 @@ package com.ifpb.caelestiabackend.domain.entities.Achievement;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import lombok.*;
-import org.hibernate.Hibernate;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.URL;
