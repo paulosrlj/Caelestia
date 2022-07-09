@@ -1,4 +1,4 @@
-package com.ifpb.caelestiabackend.util;
+package com.ifpb.caelestiabackend.util.factories;
 
 import com.ifpb.caelestiabackend.domain.entities.Module;
 import com.ifpb.caelestiabackend.domain.entities.TheoricLesson;

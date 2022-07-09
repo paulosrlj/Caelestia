@@ -3,10 +3,8 @@ package com.ifpb.caelestiabackend.repository;
 import com.ifpb.caelestiabackend.domain.entities.Achievement.Achievement;
 import com.ifpb.caelestiabackend.domain.entities.Achievement.BonusType;
 import com.ifpb.caelestiabackend.domain.entities.Module;
-import com.ifpb.caelestiabackend.domain.entities.PraticalLesson.PraticalLesson;
-import com.ifpb.caelestiabackend.util.AchievementFactory;
-import com.ifpb.caelestiabackend.util.ModuleFactory;
-import com.ifpb.caelestiabackend.util.PraticalLessonFactory;
+import com.ifpb.caelestiabackend.util.factories.AchievementFactory;
+import com.ifpb.caelestiabackend.util.factories.ModuleFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,8 +16,6 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
 import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @DisplayName("Achievement repository tests")
