@@ -2,6 +2,7 @@ package com.ifpb.caelestiabackend.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.ifpb.caelestiabackend.domain.entities.HttpErrorMessage;
+import com.ifpb.caelestiabackend.exception.achievement.InvalidUrlImage;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -71,5 +74,13 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<HttpErrorMessage> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    @ExceptionHandler(InvalidUrlImage.class)
+    public ResponseEntity<HttpErrorMessage> handleMalfoermedUrlException(InvalidUrlImage ex, WebRequest request) {
+        List<String> errors = Collections.singletonList(ex.getMessage());
+
+        HttpErrorMessage message = new HttpErrorMessage(HttpStatus.BAD_REQUEST, "Erro de validação", errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(message);
     }
 }
