@@ -130,6 +130,31 @@ class AchievementControllerTest {
     }
 
     @Test
+    public void shouldThrowExceptionIfNoModuleIsProvided() throws Exception {
+        Module module = new Module();
+        module.setId(1L);
+        Achievement acToSave = AchievementFactory.makeAchievement();
+        acToSave.setModule(module);
+
+        RequestBuilder request = MockMvcRequestBuilders
+                .post("/achievement/")
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"achievementName\":\"Observador Celeste\"," +
+                        "\"description\": \"+5% de xp em lições do tipo teórica\"," +
+                        "\"baseBonusPercentage\": 0.5," +
+                        "\"bonusType\": \"THEORIC_LESSON\"," +
+                        "\"urlImage\": \"https://urlqualquer.com.br\"" +
+                        "}")
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException()
+                        instanceof MethodArgumentNotValidException));
+    }
+
+    @Test
     public void shouldReturnCorrectData() throws Exception {
         Module module = new Module();
         module.setId(1L);
