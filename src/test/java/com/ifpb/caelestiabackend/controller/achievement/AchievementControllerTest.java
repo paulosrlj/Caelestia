@@ -3,6 +3,7 @@ package com.ifpb.caelestiabackend.controller.achievement;
 import com.ifpb.caelestiabackend.domain.entities.Achievement.Achievement;
 import com.ifpb.caelestiabackend.domain.entities.Achievement.BonusType;
 import com.ifpb.caelestiabackend.domain.entities.Module;
+import com.ifpb.caelestiabackend.exception.achievement.InvalidUrlImage;
 import com.ifpb.caelestiabackend.repository.AchievementRepository;
 import com.ifpb.caelestiabackend.services.achievement.AchievementService;
 import com.ifpb.caelestiabackend.util.AchievementFactory;
@@ -267,5 +268,25 @@ class AchievementControllerTest {
                         "\"module\":{\"id\":1,\"name\":\"Astronomia antiga\"}}"
                 ,result.getResponse().getContentAsString()
         );
+    }
+
+    @Test
+    public void shouldThrowExceptionIfTryToUpdateWithInvalidImageUrl() throws Exception {
+        RequestBuilder request = MockMvcRequestBuilders
+                .put("/achievement/{id}", 1L)
+                .accept(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"achievementName\":\"Novo nome da conquista\"," +
+                        "\"bonusType\":\"PRATICAL_LESSON\"," +
+                        "\"urlImage\":\"//urlqualquer.com.br\"" +
+                        "}")
+                .contentType(MediaType.APPLICATION_JSON);
+
+
+        mockMvc.perform(request)
+                .andExpect(status().isBadRequest())
+                .andExpect(result -> Assertions.assertTrue(result.getResolvedException()
+                        instanceof InvalidUrlImage));
+
     }
 }
