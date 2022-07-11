@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -49,5 +51,15 @@ class PlayerRepositoryTest {
         Assertions.assertThat(updatedPlayer.getNickname()).isEqualTo(persistedPlayer.getNickname());
         Assertions.assertThat(updatedPlayer.getCoins()).isEqualTo(persistedPlayer.getCoins());
 
+    }
+
+    @Test
+    public void mustFindPlayerById() {
+        Player player = PlayerFactory.makePlayer();
+        Player expectedPlayer = playerRepository.save(player);
+
+        Optional<Player> playerFound = playerRepository.findById(expectedPlayer.getId());
+
+        Assertions.assertThat(expectedPlayer).isEqualTo(playerFound.get());
     }
 }
